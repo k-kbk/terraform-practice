@@ -1,16 +1,15 @@
 version: 3
+automerge: true
 projects:
 # Global
 - name: global
   dir: global
-  automerge: true
   autoplan:
     when_modified: [ "*.tf", "*.tfvars" ]
     enabled: true
 # Dev
 - name: dev
   dir: envs/dev
-  automerge: true
   autoplan:
     when_modified: [ "*.tf", "*.tfvars" ]
     enabled: true
