@@ -1,0 +1,23 @@
+version: 3
+projects:
+# Global
+- name: global
+  dir: global
+  automerge: true
+  autoplan:
+    when_modified: [ "*.tf", "*.tfvars" ]
+    enabled: true
+# Dev
+- name: dev
+  dir: envs/dev
+  automerge: true
+  autoplan:
+    when_modified: [ "*.tf", "*.tfvars" ]
+    enabled: true
+# Prod
+- name: prod
+  dir: envs/prod
+  apply_requirements: [ approved ]
+  autoplan:
+    when_modified: [ "*.tf", "*.tfvars" ]
+    enabled: true
