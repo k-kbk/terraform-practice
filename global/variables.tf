@@ -1,15 +1,18 @@
 variable "region" {
   description = "AWS region"
+  type        = string
   default     = "ap-northeast-2"
 }
 
 variable "vpc_cidr" {
   description = "VPC CIDR"
+  type        = string
   default     = "192.168.0.0/16"
 }
 
 variable "public_subnet_cidr" {
   description = "Public Subnet CIDR"
+  type        = string
   default     = "192.168.1.0/24"
 }
 
@@ -37,5 +40,6 @@ variable "repo_allowlist" {
 
 variable "allowed_ssh_cidr" {
   description = "Allowed SSH CIDR"
+  type        = string
   default     = "0.0.0.0/0"
 }

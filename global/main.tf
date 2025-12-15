@@ -104,8 +104,7 @@ resource "aws_instance" "atlantis_server" {
 }
 
 resource "aws_eip" "atlantis_eip" {
-  instance = aws_instance.atlantis_server.id
-  domain   = "vpc"
+  domain = "vpc"
 
   tags = {
     Name = "atlantis-eip"
