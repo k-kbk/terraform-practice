@@ -36,14 +36,24 @@ resource "aws_security_group_rule" "atlantis_ingress_web" {
   description       = "Allow Atlantis Webhook from GitHub"
 }
 
-resource "aws_security_group_rule" "atlantis_egress_all" {
+resource "aws_security_group_rule" "atlantis_egress_http" {
   type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.atlantis_sg.id
-  description       = "Allow all outbound traffic"
+  description       = "Allow HTTP outbound traffic"
+}
+
+resource "aws_security_group_rule" "atlantis_egress_https" {
+  type              = "egress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.atlantis_sg.id
+  description       = "Allow HTTPS outbound traffic"
 }
 
 resource "aws_instance" "atlantis_server" {
@@ -53,6 +63,11 @@ resource "aws_instance" "atlantis_server" {
 
   vpc_security_group_ids = [aws_security_group.atlantis_sg.id]
   iam_instance_profile   = aws_iam_instance_profile.atlantis_profile.name
+
+  root_block_device {
+    volume_type = "gp3"
+    encrypted   = true
+  }
 
   metadata_options {
     http_endpoint               = "enabled"
@@ -92,4 +107,9 @@ resource "aws_eip" "atlantis_eip" {
   tags = {
     Name = "atlantis-eip"
   }
+}
+
+resource "aws_eip_association" "atlantis_eip_assoc" {
+  instance_id   = aws_instance.atlantis_server.id
+  allocation_id = aws_eip.atlantis_eip.id
 }
