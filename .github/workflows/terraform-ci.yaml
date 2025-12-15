@@ -1,0 +1,64 @@
+name: Terraform CI
+on:
+  pull_request:
+    branches: ['main']
+    paths:
+      - '**.tf'
+      - '.terraform.lock.hcl'
+
+jobs:
+  terraform-ci:
+    name: Terraform CI
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      security-events: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Format
+        run: terraform fmt -check -recursive -diff
+
+      - name: Terraform Validate
+        env:
+          AWS_ACCESS_KEY_ID: 'access_key'
+          AWS_SECRET_ACCESS_KEY: 'secret_access_key'
+          AWS_REGION: 'ap-northeast-2'
+        run: |
+          find . -type f -name "*.tf" -not -path "*/.terraform/*" -exec dirname {} \; | sort -u | while read dir; do
+            echo "Processing directory: $dir"
+            terraform -chdir="$dir" init -backend=false
+            terraform -chdir="$dir" validate
+            if [ $? -ne 0 ]; then
+              echo "Validation failed in $dir"
+              exit 1
+            fi
+          done
+
+      - name: Run Trivy vulnerability scanner in IaC mode
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: 'config'
+          hide-progress: false
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v6
+        with:
+          tflint_version: v0.52.0
+
+      - name: Init TFLint
+        run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run TFLint
+        run: tflint --recursive -f compact

@@ -1,11 +1,5 @@
 version: 3
 projects:
-# Global
-- name: global
-  dir: global
-  autoplan:
-    when_modified: [ "*.tf", "*.tfvars" ]
-    enabled: true
 # Dev
 - name: dev
   dir: envs/dev
