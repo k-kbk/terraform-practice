@@ -54,6 +54,12 @@ resource "aws_instance" "atlantis_server" {
   vpc_security_group_ids = [aws_security_group.atlantis_sg.id]
   iam_instance_profile   = aws_iam_instance_profile.atlantis_profile.name
 
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 2
+  }
+
   user_data = <<-EOF
     #!/bin/bash
 
