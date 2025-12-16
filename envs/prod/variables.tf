@@ -40,12 +40,6 @@ variable "instance_type" {
   default     = "t3.small"
 }
 
-variable "ami_id" {
-  description = "Optional AMI override"
-  type        = string
-  default     = null
-}
-
 variable "associate_public_ip" {
   description = "Whether to associate a public IP with the instance"
   type        = bool

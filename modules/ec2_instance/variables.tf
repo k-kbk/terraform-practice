@@ -32,6 +32,12 @@ variable "instance_type" {
   default     = "t3.micro"
 }
 
+variable "ami_id" {
+  description = "Optional override for the AMI ID. Leave null to use the latest Amazon Linux 2023 image"
+  type        = string
+  default     = null
+}
+
 variable "associate_public_ip" {
   description = "Whether to associate a public IP with the instance"
   type        = bool

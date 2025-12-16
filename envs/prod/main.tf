@@ -19,7 +19,6 @@ module "ec2_instance" {
   public_subnet_count   = var.public_subnet_count
   public_subnet_newbits = var.public_subnet_newbits
   instance_type         = var.instance_type
-  ami_id                = var.ami_id
   associate_public_ip   = var.associate_public_ip
   ingress_cidrs         = var.ingress_cidrs
   user_data             = var.user_data
