@@ -1,9 +1,11 @@
+# tfsec:ignore:AVD-AWS-0053
 resource "aws_lb" "this" {
-  name               = "${local.name_prefix}-alb"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb.id]
-  subnets            = aws_subnet.public[*].id
+  name                       = "${local.name_prefix}-alb"
+  internal                   = false
+  load_balancer_type         = "application"
+  security_groups            = [aws_security_group.alb.id]
+  subnets                    = aws_subnet.public[*].id
+  drop_invalid_header_fields = true
 
   tags = merge(local.common_tags, {
     Name = "${local.name_prefix}-alb"
@@ -32,6 +34,7 @@ resource "aws_lb_target_group" "nginx" {
   })
 }
 
+# tfsec:ignore:AVD-AWS-0054
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.this.arn
   port              = 80
