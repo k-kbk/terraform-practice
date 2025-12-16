@@ -1,0 +1,47 @@
+# tfsec:ignore:AVD-AWS-0053
+resource "aws_lb" "this" {
+  name                       = "${local.name_prefix}-alb"
+  internal                   = false
+  load_balancer_type         = "application"
+  security_groups            = [aws_security_group.alb.id]
+  subnets                    = aws_subnet.public[*].id
+  drop_invalid_header_fields = true
+
+  tags = merge(local.common_tags, {
+    Name = "${local.name_prefix}-alb"
+  })
+}
+
+resource "aws_lb_target_group" "nginx" {
+  name        = "${local.name_prefix}-tg"
+  port        = 80
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = aws_vpc.this.id
+
+  health_check {
+    path                = "/"
+    protocol            = "HTTP"
+    matcher             = "200"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 5
+    interval            = 30
+  }
+
+  tags = merge(local.common_tags, {
+    Name = "${local.name_prefix}-tg"
+  })
+}
+
+# tfsec:ignore:AVD-AWS-0054
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.this.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.nginx.arn
+  }
+}
