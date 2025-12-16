@@ -46,18 +46,6 @@ variable "ami_id" {
   default     = null
 }
 
-variable "ssh_key_name" {
-  description = "Existing SSH key pair name"
-  type        = string
-  default     = null
-}
-
-variable "ssh_public_key" {
-  description = "Public key material for registering a temporary key pair"
-  type        = string
-  default     = null
-}
-
 variable "associate_public_ip" {
   description = "Whether to associate a public IP with the instance"
   type        = bool

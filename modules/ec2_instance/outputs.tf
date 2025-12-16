@@ -22,3 +22,14 @@ output "public_subnet_ids" {
   value       = aws_subnet.public[*].id
   description = "Public subnets created for the instance"
 }
+
+output "key_pair_name" {
+  value       = aws_key_pair.this.key_name
+  description = "Name of the generated key pair"
+}
+
+output "private_key_pem" {
+  value       = tls_private_key.this.private_key_pem
+  description = "Private key material for the generated key pair"
+  sensitive   = true
+}

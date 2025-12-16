@@ -20,8 +20,6 @@ module "ec2_instance" {
   public_subnet_newbits = var.public_subnet_newbits
   instance_type         = var.instance_type
   ami_id                = var.ami_id
-  ssh_key_name          = var.ssh_key_name
-  ssh_public_key        = var.ssh_public_key
   associate_public_ip   = var.associate_public_ip
   ingress_cidrs         = var.ingress_cidrs
   user_data             = var.user_data

@@ -1,13 +1,9 @@
-locals {
-  key_name = coalesce(var.ssh_key_name, try(aws_key_pair.generated[0].key_name, null))
-}
-
 resource "aws_instance" "this" {
-  ami                         = "ami-0d1ae7d9137336663"
+  ami                         = "ami-0d1ae7d9137336663" # Amazon Linux 2023 kernel-6.1
   instance_type               = var.instance_type
   subnet_id                   = aws_subnet.public[0].id
   vpc_security_group_ids      = [aws_security_group.instance.id]
-  key_name                    = local.key_name
+  key_name                    = aws_key_pair.this.key_name
   associate_public_ip_address = var.associate_public_ip
   user_data                   = var.user_data
 
