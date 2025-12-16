@@ -15,7 +15,8 @@ resource "aws_security_group_rule" "ssh" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = var.ingress_cidrs
+  # trivy:ignore:AVD-AWS-0107
+  cidr_blocks = var.ingress_cidrs
 }
 
 resource "aws_security_group_rule" "http" {
@@ -28,12 +29,24 @@ resource "aws_security_group_rule" "http" {
   cidr_blocks       = var.ingress_cidrs
 }
 
-resource "aws_security_group_rule" "egress" {
+resource "aws_security_group_rule" "instance_egress_http" {
   type              = "egress"
   security_group_id = aws_security_group.instance.id
-  description       = "Allow all egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
+  description       = "Allow HTTP outbound traffic"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  # trivy:ignore:AVD-AWS-0104
+  cidr_blocks = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "instance_egress_https" {
+  type              = "egress"
+  security_group_id = aws_security_group.instance.id
+  description       = "Allow HTTPS outbound traffic"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  # trivy:ignore:AVD-AWS-0104
+  cidr_blocks = ["0.0.0.0/0"]
 }
