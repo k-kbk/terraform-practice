@@ -1,12 +1,35 @@
 version: 3
+
+workflows:
+  dev:
+    plan:
+      steps:
+      - init
+      - plan:
+          extra_args:
+          - "-var-file=/etc/atlantis/tfvars/dev.tfvars"
+    apply:
+      steps:
+      - apply
+
+  prod:
+    plan:
+      steps:
+      - init
+      - plan:
+          extra_args:
+          - "-var-file=/etc/atlantis/tfvars/prod.tfvars"
+    apply:
+      steps:
+      - apply
+
 projects:
-# Dev
 - name: dev
   dir: envs/dev
   autoplan:
     when_modified: [ "*.tf", "*.tfvars" ]
     enabled: true
-# Prod
+
 - name: prod
   dir: envs/prod
   autoplan:
