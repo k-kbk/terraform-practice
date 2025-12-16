@@ -11,30 +11,30 @@ variable "vpc_cidr" {
 }
 
 variable "public_subnet_cidr" {
-  description = "Public Subnet CIDR"
+  description = "Public subnet CIDR"
   type        = string
   default     = "192.168.1.0/24"
 }
 
 variable "gh_user" {
-  description = "GitHub Username"
+  description = "GitHub username"
   type        = string
 }
 
 variable "gh_token" {
-  description = "GitHub Personal Access Token"
+  description = "GitHub personal access token"
   type        = string
   sensitive   = true
 }
 
 variable "gh_webhook_secret" {
-  description = "GitHub Webhook Secret"
+  description = "GitHub webhook secret"
   type        = string
   sensitive   = true
 }
 
 variable "repo_allowlist" {
-  description = "Atlantis Allowlisted Repositories"
+  description = "Atlantis allowlisted repositories"
   type        = string
 }
 
