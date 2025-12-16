@@ -11,7 +11,6 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_ami_id"></a> [ami_id](#input_ami_id) | Optional AMI override | `string` | `null` | no |
 | <a name="input_associate_public_ip"></a> [associate_public_ip](#input_associate_public_ip) | Whether to associate a public IP with the instance | `bool` | `true` | no |
 | <a name="input_environment"></a> [environment](#input_environment) | Environment name | `string` | `"prod"` | no |
 | <a name="input_ingress_cidrs"></a> [ingress_cidrs](#input_ingress_cidrs) | CIDR blocks allowed to reach the instance | `list(string)` | <pre>[<br/>  "0.0.0.0/0"<br/>]</pre> | no |
